@@ -1,0 +1,261 @@
+*{
+    padding: 0;
+    margin: 0;
+    border: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+main {
+	align-items:start;
+	padding-top: 2vh;
+}
+
+table, th, td {
+    border-collapse: collapse;
+    padding: 0.8rem;
+}
+
+.cont_tabla {
+    background-color: rgb(255, 255, 255,0.7);
+    width: 96vw;
+    height: auto;
+	max-height: 88vh;
+    display: flex;
+    justify-content: center;        
+    flex-wrap: wrap;
+    border-radius: 0.8rem;
+}
+
+/***************************************************************************************************/
+.table_header {
+    display: flex;
+    width: 95%;
+    margin-top: 1%;
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+/***************************************************/
+.row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    width: 100%;
+    justify-content: space-between;
+}
+/***********************************/
+
+.row>div, .cbo-listar, .buscardor{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    width: auto;    
+}
+/***********************************/
+
+.cbo-listar {
+    margin: 0px 1.2rem;
+}
+
+.cbo-listar>select {
+    height: 2.15rem;
+    width: auto; 
+    padding: 0.2rem 0.8rem;
+    border-radius: 0.4rem;
+    font-size: 1rem;
+    background-color: rgb(255, 255, 255);
+}
+
+.buscardor {
+    margin: 0px 1rem;
+}
+
+.buscardor>input {
+    height: 2.15rem;
+    width: 13rem;
+    padding: 0px 0px 0px 8px;
+    border-radius: 0.4rem;
+    font-size: 1rem;
+    background-color: rgb(255, 255, 255);
+}
+
+.cbo-listar>label, .buscardor>label {
+    text-wrap: nowrap;
+    font-size: 1rem;
+    display: block;
+    padding: 0.5rem 1rem;
+    margin: 0% 3%;
+    border-radius: 0.5rem;
+    background-color: #d5d1defe;
+}
+/***********************************/
+.row>h1 {
+    font-size: 2.2rem;
+}
+
+.boton { 
+    margin: 0.8% 2%;
+    border-radius: 0.5rem;
+    display: flex;
+    position: relative;
+    overflow: hidden;
+    background-color: #0011a8;
+}
+
+.boton>a {
+    font-size: 1.1rem;
+    display: block;
+    padding: 0.6rem 2rem 0.6rem 1rem;
+    cursor: pointer;
+    text-wrap: nowrap;
+    color: white;
+    z-index: 1;
+}
+
+
+.boton::after {
+    content: "";
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    background: linear-gradient(135deg, #0011a8, #0066ff, #0011a8);
+    z-index: 0;
+    transition: .5s ease-in-out all;
+    opacity: 0;
+}
+
+.boton:hover::after {
+    opacity: 1;
+}
+/***************************************************************************************************/
+
+
+.table_body {
+    background-color: white;
+    width: 95%;
+    max-height: 65vh;
+    border-radius: 0.6rem;
+    overflow: auto;
+	margin-top: 0.6%;
+	margin-bottom: 2%; 
+}
+
+.table_body::-webkit-scrollbar {
+    width: 0.5rem;
+    height: 0.5rem;
+}
+
+.table_body::-webkit-scrollbar-thumb {
+    border-radius: .5rem;
+    background-color: #0004;
+    visibility: hidden;
+}
+
+.table_body:hover::-webkit-scrollbar-thumb {
+    visibility: visible;
+}
+
+table {
+    width: 100%;
+}
+
+thead  th {
+    position: sticky;
+    top: 0;
+    left: 0;
+    background-color: #d5d1defe;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #0000000b;
+}
+
+/*tbody tr:hover {
+    background-color: #fff6;
+}*/
+/*************************************************/
+
+form.boton {
+    margin: 0.8% 2%;
+    border-radius: 0.5rem;
+    position: relative;
+    overflow: hidden;
+    background-color: #0011a8;
+    display: flex;
+}
+
+.boton-btn {
+    font-size: 1.1rem;
+	text-wrap: nowrap;
+    padding: 0.6rem 2rem 0.6rem 1rem;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    color: white;
+    z-index: 1;
+    position: relative;
+}
+
+form.boton::after {
+    content: "";
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    background: linear-gradient(135deg, #0011a8, #0066ff, #0011a8);
+    z-index: 0;
+    transition: .5s ease-in-out all;
+    opacity: 0;
+}
+
+form.boton:hover::after {
+    opacity: 1;
+}
+
+/*********************************/
+.centrado {
+    text-align: center;
+	text-wrap: nowrap;
+}/********************************/
+
+.btn {
+   /* padding: 0.4rem 0.8rem;*/
+   	display: inline-block;
+    border-radius: 0.5rem;
+	width: 85px;
+	height: 30px;
+	margin: 0px 2%;
+    color: white;
+    cursor: pointer;
+	text-align: center;       /* Centra horizontalmente */
+	line-height: 30px;         /* Igual al height para centrar verticalmente */
+}
+
+.btn.btn-danger {
+    background-color: rgb(255, 0, 0);
+}
+
+.btn.btn-info {
+    background-color: rgb(0, 150, 0);
+}
+
+.btn.btn-primary {
+    background-color: rgb(0, 0, 255);
+}
+
+.btn.btn-danger:hover {
+    background-color: rgb(210, 0, 0);
+}
+
+.btn.btn-info:hover {
+    background-color: green;
+}
+
+.btn.btn-primary:hover {
+    background-color: rgb(0, 0, 190);
+}
+

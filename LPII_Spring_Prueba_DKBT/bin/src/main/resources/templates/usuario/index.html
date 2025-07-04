@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="ISO-8859-1">
+	<title>Spring Boot</title>
+	<link rel="stylesheet" href="/estilos/navbar.css">
+	<link rel="stylesheet" href="/estilos/tables.css">
+</head>
+
+<body>
+	<div th:replace="~{fragments/navbar :: navbar}"></div>
+	<main>
+		<div class="cont_tabla">
+			<section class="table_header">
+				<div class="row">
+					<h1>Lista Usuarios</h1>
+				</div>
+				<div class="row">
+					<div class="boton">
+						<a th:href="@{/usuario/new}">Nuevo Usuario</a>
+					</div>
+				</div>
+			</section>
+			<section class="table_body">
+				<table>
+					<thead>
+						<tr>
+							<th>Id</th>
+							<th>Nombres</th>
+							<th>Apellidos</th>
+							<th>Usuario</th>
+							<th>Rol</th>
+							<th>Clave</th>
+							<th>Acciones</th>
+						</tr>
+					</thead>
+					<tbody>
+					<tbody>
+						<tr th:each="item : ${usuarios}">
+							<td class="centrado" th:text="${item.id}"></td>
+							<td th:text="${item.empleado.nombres}"></td>
+							<td th:text="${item.empleado.apellidos}"></td>
+							<td th:text="${item.username}"></td>
+							<td class="centrado" th:text="${item.rol.descripcion}"></td>
+							<td class="centrado" th:text="${item.clave}"></td>
+							<td class="centrado">
+								<a th:href="@{/usuario/edit/{id}(id=${item.id})}" class="btn btn-primary">Editar</a>
+								<a th:href="@{/usuario/info/{id}(id=${item.id})}" class="btn btn-info">Detalle</a>
+								<a th:href="@{/usuario/{id}(id=${item.id})}" class="btn btn-danger">Eliminar</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</section>
+		</div>
+	</main>
+
+</body>
+
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle Orden de Compra</title>
+    <link rel="stylesheet" href="/estilos/tables.css">
+    <link rel="stylesheet" href="/estilos/navbar.css">
+</head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <main>
+        <div class="cont_tabla">
+            <!-- Encabezado -->
+            <section class="table_header">
+                <div class="row">
+                    <h1>Detalle de Orden de Compra</h1>
+                </div>
+            </section>
+
+            <!-- Datos Generales -->
+            <section class="table_body">
+                <h2>Datos Generales</h2>
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>ID Orden</th>
+                            <td th:text="${ordenCompra.id}"></td>
+                        </tr>
+                        <tr>
+                            <th>Solicitud Compra</th>
+                            <td th:text="${ordenCompra.solicitudCompra.id}"></td>
+                        </tr>
+                        <tr>
+                            <th>Proveedor</th>
+                            <td th:text="${ordenCompra.proveedor.nombre}"></td>
+                        </tr>
+                        <tr>
+                            <th>Total</th>
+                            <td th:text="${ordenCompra.total}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Detalle de productos -->
+                <h2>Detalle de Productos</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID Producto</th>
+                            <th>Nombre Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unitario</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="detalle : ${detalles}">
+                            <td th:text="${detalle.producto.id}"></td>
+                            <td th:text="${detalle.producto.nombre}"></td>
+                            <td class="centrado" th:text="${detalle.cantidad}"></td>
+                            <td class="centrado" th:text="${detalle.precioUnitario}"></td>
+                            <td class="centrado" th:text="${detalle.subTotal}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div style="margin-top: 20px;">
+                    <a th:href="@{/ordenCompra}" class="btn btn-primary">Volver</a>
+                </div>
+            </section>
+        </div>
+    </main>
+</body>
+</html>

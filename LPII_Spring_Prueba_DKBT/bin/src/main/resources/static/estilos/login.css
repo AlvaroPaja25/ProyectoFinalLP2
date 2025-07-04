@@ -1,0 +1,30 @@
+* {
+    padding: 0px;
+    margin: 0px;
+    box-sizing: content-box;
+}
+
+.container-fluid {
+    height: 8vh;
+    width: 100vw;
+    background-color: rgb(34, 34, 127);
+}
+
+main {
+	display: flex;
+    align-items: center;
+ 
+}
+
+
+
+.card {
+    height: auto;
+    padding-top: 14px;
+    background: linear-gradient(
+        135deg, rgba(255, 255, 255, 0)0%,rgb(214, 214, 214)50%,rgb(193, 193, 193)100%
+    );
+    box-shadow: 10px 10px 25px 0px rgb(0, 0, 0, 0.8);
+   
+}
+

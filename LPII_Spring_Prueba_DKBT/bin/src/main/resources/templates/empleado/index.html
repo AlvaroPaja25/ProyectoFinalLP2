@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+	<meta charset="ISO-8859-1">
+	<title>Spring Boot</title>
+	<link rel="stylesheet" href="/estilos/tables.css">
+	<link rel="stylesheet" href="/estilos/navbar.css">
+</head>
+
+<body>
+	<div th:replace="~{fragments/navbar :: navbar}"></div>
+	<main>
+		<div class="cont_tabla">
+			<section class="table_header">
+				<div class="row">
+					<h1>Lista Empleados</h1>
+				</div>
+				<div class="row">
+					<div>
+						<div class="boton">
+							<a th:href="@{/empleado/new}">Agregar Empleado</a>
+						</div>
+					</div>
+					<div>
+						<div class="cbo-listar">
+							<label>Área</label>
+							<select id="areaFilter">
+								<option value="">Todas las Áreas</option>
+								<option th:each="area : ${areaList}" th:value="${area.descripcion}"
+									th:text="${area.descripcion}">
+								</option>
+							</select>
+						</div>
+						<div class="cbo-listar">
+							<label>Cargo</label>
+							<select id="cargoFilter">
+								<option value="">Todos los Cargos</option>
+								<option th:each="cargo : ${cargoList}" th:value="${cargo.descripcion}"
+									th:text="${cargo.descripcion}">
+								</option>
+							</select>
+						</div>
+						<div class="buscardor">
+							<label>Buscar:</label>
+							<input type="text" id="nombreFilter" placeholder="Nombre o Apellido..." />
+						</div>
+					</div>
+			</section>
+			<section class="table_body">
+				<table>
+					<thead>
+						<tr>
+							<th>Id</th>
+							<th>Nombres</th>
+							<th>Apellidos</th>
+							<th>Área</th>
+							<th>Ciudad</th>
+							<th>Dirección</th>
+							<th>Telefono</th>
+							<th>Cargo</th>
+							<th>Acciones</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="item : ${empleados}" th:attr="data-nombres=${item.nombres}, 
+						                              data-apellidos=${item.apellidos}, 
+						                              data-area=${item.area.descripcion}, 
+						                              data-cargo=${item.cargo.descripcion}">
+							<td class="centrado" th:text="${item.id}"></td>
+							<td th:text="${item.nombres}"></td>
+							<td th:text="${item.apellidos}"></td>
+							<td th:text="${item.area.descripcion}"></td>
+							<td th:text="${item.nombreCiudad}"></td>
+							<td th:text="${item.direccionEmpleado}"></td>
+							<td class="centrado" th:text="${item.telefono}"></td>
+							<td class="centrado" th:text="${item.cargo.descripcion}"></td>
+							<td class="centrado">
+								<a th:href="@{/empleado/edit/{id}(id=${item.id})}" class="btn btn-primary">Editar</a>
+								<a th:href="@{/empleado/{id}(id=${item.id})}" class="btn btn-danger">Despedir</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</section>
+		</div>
+	</main>
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			const nombreInput = document.getElementById('nombreFilter');
+			const areaSelect = document.getElementById('areaFilter');
+			const cargoSelect = document.getElementById('cargoFilter');
+			const filas = document.querySelectorAll('tbody tr');
+
+			function filtrar() {
+				const nombre = nombreInput.value.toLowerCase();
+				const area = areaSelect.value.toLowerCase();
+				const cargo = cargoSelect.value.toLowerCase();
+
+				filas.forEach(fila => {
+					const nom = fila.getAttribute('data-nombres')?.toLowerCase();
+					const ape = fila.getAttribute('data-apellidos')?.toLowerCase();
+					const ar = fila.getAttribute('data-area')?.toLowerCase();
+					const cg = fila.getAttribute('data-cargo')?.toLowerCase();
+
+					const coincideNombre = !nombre || nom.includes(nombre) || ape.includes(nombre);
+					const coincideArea = !area || ar === area;
+					const coincideCargo = !cargo || cg === cargo;
+
+					fila.style.display = (coincideNombre && coincideArea && coincideCargo) ? '' : 'none';
+				});
+			}
+
+			nombreInput.addEventListener('input', filtrar);
+			areaSelect.addEventListener('change', filtrar);
+			cargoSelect.addEventListener('change', filtrar);
+		});
+	</script>
+</body>
+
+</html>

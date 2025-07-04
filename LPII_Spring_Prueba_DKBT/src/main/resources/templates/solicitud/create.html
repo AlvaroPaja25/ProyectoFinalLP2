@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="ISO-8859-1">
+	<title>Crear Solicitud</title>
+	<link rel="stylesheet" href="/estilos/navbar.css">
+	<link rel="stylesheet" href="/estilos/formulario.css">
+	<link rel="stylesheet" href="/estilos/tables.css">
+</head>
+
+<body>
+	<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+	<main>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-8 offset-md-2">
+					<div class="card" style="width: 55vw;">
+						<div class="card-header">
+							<h2 class="text-center">Nueva Solicitud</h2>
+						</div>
+
+						<div class="card-body">
+							<form th:action="@{/solicitud}" th:object="${solicitud}" method="POST">
+
+								<!-- Tipo Solicitud -->
+								<div class="form-group">
+									<label>Tipo de Solicitud</label>
+									<select class="form-control" th:field="*{tipoSolicitud.id}">
+										<option value="">-- Seleccione --</option>
+										<option th:each="t : ${tipoSolicitudList}" th:value="${t.id}"
+											th:text="${t.descripcion}"></option>
+									</select>
+								</div>
+
+								<!-- Empleado -->
+								<div class="form-group">
+									<label>Empleado</label>
+									<select class="form-control" th:field="*{empleado.id}">
+										<option value="">-- Seleccione --</option>
+										<option th:each="e : ${empleadoList}" th:value="${e.id}"
+											th:text="${e.nombres + ' ' + e.apellidos}"></option>
+									</select>
+								</div>
+
+								<!-- Área -->
+								<div class="form-group">
+									<label>Área</label>
+									<select class="form-control" th:field="*{area.id}">
+										<option value="">-- Seleccione --</option>
+										<option th:each="a : ${areaList}" th:value="${a.id}" th:text="${a.descripcion}">
+										</option>
+									</select>
+								</div>
+
+								<hr>
+
+								<!-- Agregar productos -->
+								<div class="form-group" style="display: flex; ">
+									<div class="form-group" style="width: 40%">
+										<label>Producto</label>
+										<select id="productoSelect" class="form-control">
+											<option value="">-- Seleccione --</option>
+											<option th:each="p : ${productoList}" th:value="${p.id}"
+												th:text="${p.nombre}"></option>
+										</select>
+									</div>
+									<div class="form-group" style="margin-left: 35px;">
+										<label>Cantidad</label>
+										<input style="font-size: 1rem; height: 2.7rem; width: 100%;" type="number"
+											id="cantidadInput" class="form-control" min="1" />
+									</div>
+								</div>
+								<div class="form-group" >
+									<label>Justificación</label>
+									<input style="font-size: 1rem; height: 2.7rem; width: 100%;" type="text"
+										id="justificacionInput" class="form-control" min="1" />
+								</div>
+
+								<div class="form-group">
+									<button type="button" class="fbtn fbtn-primary" onclick="agregarProducto()">Agregar
+										Producto</button>
+								</div>
+
+								<!-- Tabla productos agregados -->
+								<div class="cont_tabla" style="width: 100%;">
+									<section class="table_body" style="height: 20vh;">
+										<table>
+											<thead>
+												<tr>
+													<th>Producto</th>
+													<th>Cantidad</th>
+													<th>Justificación</th>
+													<th>Eliminar</th>
+												</tr>
+											</thead>
+											<tbody id="detalleTabla"></tbody>
+										</table>
+									</section>
+								</div>
+
+								<!-- Botones -->
+								<div class="box-footer text-center mt-4"
+									style="display: flex; justify-content: space-around;">
+									<button type="submit" class="fbtn fbtn-primary">Guardar</button>
+									<a th:href="@{/solicitud}" class="fbtn fbtn-cancelar">Cancelar</a>
+								</div>
+
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+
+	<script>
+		let contador = 0;
+
+		function agregarProducto() {
+			const select = document.getElementById("productoSelect");
+			const cantidad = document.getElementById("cantidadInput").value;
+			const justificacion = document.getElementById("justificacionInput").value;
+
+			if (!select.value || cantidad <= 0 || !justificacion.trim()) {
+				alert("Seleccione un producto, cantidad válida y justificación.");
+				return;
+			}
+
+			const productoId = select.value;
+			const productoNombre = select.options[select.selectedIndex].text;
+
+			const tbody = document.getElementById("detalleTabla");
+
+			const row = document.createElement("tr");
+			row.innerHTML = `
+				<td>
+					${productoNombre}
+					<input type="hidden" name="detalles[${contador}].producto.id" value="${productoId}" />
+				</td>
+				<td>
+					${cantidad}
+					<input type="hidden" name="detalles[${contador}].cantidad" value="${cantidad}" />
+				</td>
+				<td>
+					${justificacion}
+					<input type="hidden" name="detalles[${contador}].justificacion" value="${justificacion}" />
+				</td>
+				<td>
+					<button type="button" class="fbtn fbtn-cancelar" onclick="this.closest('tr').remove()">X</button>
+				</td>
+			`;
+			tbody.appendChild(row);
+			contador++;
+
+			// Reset
+			select.selectedIndex = 0;
+			document.getElementById("cantidadInput").value = '';
+			document.getElementById("justificacionInput").value = '';
+		}
+	</script>
+
+</body>
+
+</html>

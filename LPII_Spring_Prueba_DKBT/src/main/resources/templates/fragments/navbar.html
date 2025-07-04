@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+</head>
+
+<body>
+	<nav th:fragment="navbar">
+		<div class="menu-logo">
+			<a class="nav-title-logo" th:href="@{/}">
+				<img th:src="@{'/img/' + ${empresaGlobal.logo}}" alt="Logo Empresa"
+					style="height: 40px; vertical-align: middle; margin-right: 10px;" />
+				<span th:text="${empresaGlobal.nombreComercial}">Clinica Solar</span>
+			</a>
+		</div>
+		<div class="menu-desplegable">
+			<ul class="menu-horizontal">
+				<li>
+					<a class="item-horizo">Gestión de Áreas</a>
+					<ul class="menu-vertical">
+						<li class="item-vert"><a class="nav-link" th:href="@{/solicitud}">Solicitudes</a></li>
+						
+					</ul>
+				</li>
+				<li>
+					<a class="item-horizo">Recursos Humanos</a>
+					<ul class="menu-vertical">
+						<li class="item-vert"><a class="nav-link" th:href="@{/empleado}">Empleados</a></li>
+						<li class="item-vert"><a class="nav-link" th:href="@{/usuario}">Usuarios</a></li>
+					</ul>
+				</li>
+				<li>
+					<a class="item-horizo" th:href="@{/empleado}">Administración</a>
+					<ul class="menu-vertical">
+						<li class="item-vert"><a class="nav-link" th:href="@{/solicitudCompra/admin}">Solicitudes de Compra</a></li>
+						<li class="item-vert"><a class="nav-link" th:href="@{/empresa/editar/1}">Empresa</a></li>
+					</ul>
+				</li>
+				<li>
+					<a class="item-horizo">Contabilidad</a>
+					<ul class="menu-vertical">
+						<li class="item-vert"><a class="nav-link" th:href="@{/solicitud/cont}">Solicitud de Abastecimietno</a></li>
+						<li class="item-vert"><a class="nav-link" th:href="@{/solicitudCompra}">Solicitud de Compra</a></li>
+						<li class="item-vert"><a class="nav-link" th:href="@{/ordenCompra}">Orden de Compra</a></li>
+						<li class="item-vert"><a class="nav-link" th:href="@{/producto}">Productos</a></li>
+						<li class="item-vert"><a class="nav-link" th:href="@{/proveedor}">Proveedores</a></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+		<div class="menu-nombre">
+			<img th:src="@{/img/usuario.png}" alt="">
+			<a th:href="@{/}" class="nombre-usuario" sec:authentication="name">Cerrar Session </a>
+		</div>
+	</nav>
+</body>
+
+</html>

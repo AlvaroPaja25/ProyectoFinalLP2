@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="ISO-8859-1">
+	<title>Spring Boot</title>
+	<link rel="stylesheet" href="/estilos/tables.css">
+	<link rel="stylesheet" href="/estilos/navbar.css">
+
+</head>
+
+<body>
+	<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+
+	<main>
+		<div class="cont_tabla">
+			<section class="table_header">
+				<div class="row">
+					<h1>Lista Productos</h1>
+				</div>
+				<div class="row">
+					<div>
+						<div class="boton">
+
+							<a th:href="@{/producto/new}">Agregar Producto   </a>
+						</div>
+						<form th:action="@{/producto}" method="get" style="display:inline;" class="boton">
+							<input type="hidden" name="filtro"
+								th:value="${filtroActual == 'vigentes' ? 'descontinuados' : 'vigentes'}" />
+							<button type="submit" class="boton-btn">
+								Mostrar [[${filtroActual == 'vigentes' ? 'Descontinuados' : 'Vigentes'}]]  
+							</button>
+						</form>
+					</div>
+					<div>
+						<div class="cbo-listar">
+							<label>Categoría</label>
+							<select id="categoriaFilter">
+								<option value="">Todos los Productos</option>
+								<option th:each="cat : ${categoriaList}" th:value="${cat.descripcion}"
+									th:text="${cat.descripcion}">
+								</option>
+							</select>
+						</div>
+
+						<div class="buscardor">
+							<label>Buscar</label>
+							<input type="text" id="nombreFilter" placeholder="Ingrese nombre..." />
+						</div>
+					</div>
+				</div>
+				
+			</section>
+			<section class="table_body">
+
+				<table>
+					<thead>
+						<tr>
+							<th>Id</th>
+							<th>Nombre</th>
+							<th>Descripcion</th>
+							<th>Categoria</th>
+							<th>Estado</th>
+							<th>Acciones</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="producto : ${productos}"
+							th:attr="data-categoria=${producto.categoria.descripcion}, data-nombre=${producto.nombre}">
+							<td class="centrado" th:text="${producto.id}"></td>
+							<td th:text="${producto.nombre}"></td>
+							<td th:text="${producto.descripcion}"></td>
+							<td th:text="${producto.categoria.descripcion}"></td>
+							<td class="centrado" th:text="${producto.estado}"></td>
+							<td class="centrado">
+								<a th:if="${filtroActual == 'vigentes'}" th:href="@{/producto/edit/{id}(id=${producto.id})}"
+									class="btn btn-primary">Editar</a>
+								<p th:if="${filtroActual == 'descontinuados'}">Necesita Autorización</p>
+								<a th:if="${filtroActual == 'vigentes'}" th:href="@{/producto/{id}(id=${producto.id})}"
+									class="btn btn-danger" style="width: 110px;">Descontinuar</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</section>
+		</div>
+	</main>
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			const categoriaSelect = document.getElementById('categoriaFilter');
+			const nombreInput = document.getElementById('nombreFilter');
+			const filas = document.querySelectorAll('tbody tr');
+
+			function filtrarTabla() {
+				const categoria = categoriaSelect.value.toLowerCase();
+				const nombre = nombreInput.value.toLowerCase();
+
+				filas.forEach(fila => {
+					const cat = fila.getAttribute('data-categoria')?.toLowerCase();
+					const nom = fila.getAttribute('data-nombre')?.toLowerCase();
+
+					const coincideCategoria = !categoria || cat === categoria;
+					const coincideNombre = !nombre || nom.includes(nombre);
+
+					fila.style.display = (coincideCategoria && coincideNombre) ? '' : 'none';
+				});
+			}
+
+			categoriaSelect.addEventListener('change', filtrarTabla);
+			nombreInput.addEventListener('input', filtrarTabla);
+		});
+	</script>
+</body>
+
+</html>

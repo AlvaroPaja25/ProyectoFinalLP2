@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="ISO-8859-1">
+	<title>Spring Boot</title>
+	<link rel="stylesheet" href="/estilos/navbar.css">
+	<link rel="stylesheet" href="/estilos/tables.css">
+</head>
+
+<body>
+	<div th:replace="~{fragments/navbar :: navbar}"></div>
+	<main>
+		<div class="cont_tabla">
+			<section class="table_header">
+				<div class="row">
+					<h1>Lista de Detalles de Solicitud</h1>
+				</div>
+				<div class="row">
+					<div>
+						<div class="boton">
+							<a th:href="@{/solicitud}">Regresar</a>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section class="table_body">
+				<table>
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Solicitud N°</th>
+							<th>Producto</th>
+							<th>descripción</th>
+							<th>Justificación</th>
+							<th>Cantidad</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="item : ${detalleSolicitud}">
+							<td class="centrado" th:text="${item.id}"></td>
+							<td class="centrado" th:text="${item.solicitud.id}"></td>
+							<td th:text="${item.producto != null ? item.producto.nombre : 'N/A'}"></td>
+							<td th:text="${item.producto != null ? item.producto.descripcion : 'N/A'}"></td>
+							<td th:text="${item.justificacion}"></td>
+							<td class="centrado" th:text="${item.cantidad}"></td>
+						</tr>
+					</tbody>
+				</table>
+			</section>
+		</div>
+	</main>
+
+</body>
+
+</html>

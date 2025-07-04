@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="ISO-8859-1">
+	<title>Editar Detalle Solicitud</title>
+	<link rel="stylesheet" href="/estilos/navbar.css">
+	<link rel="stylesheet" href="/estilos/formulario.css">
+</head>
+<body>
+	<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+	<main>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-6 offset-md-3">
+					<div class="card" style="width: 48vw;">
+						<div class="card-header">
+							<h2 class="text-center">Editar Detalle Solicitud</h2>
+						</div>
+
+						<div class="card-body">
+							<form th:action="@{/detalle-solicitud/save}" th:object="${detalleSolicitud}" method="POST">
+								<input type="hidden" th:field="*{id}" />
+								<input type="hidden" th:field="*{solicitud.id}" />
+
+								<div class="form-group">
+									<label>Producto</label>
+									<select class="form-control" th:field="*{producto.id}">
+										<option value="">-- Seleccione --</option>
+										<option th:each="p : ${productoList}" th:value="${p.id}" th:text="${p.nombre}"></option>
+									</select>
+								</div>
+
+								<div class="form-group">
+									<label>Cantidad</label>
+									<input type="number" class="form-control" th:field="*{cantidad}" min="1" />
+								</div>
+
+								<div class="form-group">
+									<label>Justificación</label>
+									<input type="text" class="form-control" th:field="*{justificacion}" />
+								</div>
+
+								<div class="box-footer">
+									<button type="submit" class="fbtn fbtn-primary">Guardar</button>
+									<a th:href="@{/solicitud}" class="fbtn fbtn-cancelar">Cancelar</a>
+								</div>
+							</form>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+</body>
+</html>

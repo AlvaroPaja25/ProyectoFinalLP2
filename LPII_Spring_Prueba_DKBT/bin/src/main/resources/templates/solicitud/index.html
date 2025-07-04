@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="ISO-8859-1">
+	<title>Lista de Solicitudes</title>
+	<link rel="stylesheet" href="/estilos/tables.css">
+	<link rel="stylesheet" href="/estilos/navbar.css">
+</head>
+
+<body>
+	<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+	<main>
+		<div class="cont_tabla">
+			<section class="table_header">
+				<div class="row">
+					<h1>Lista Solicitudes</h1>
+				</div>
+				<div class="row">
+					<div>
+						<div class="boton">
+							<a th:href="@{/solicitud/new}">Nueva Solicitud</a>
+						</div>
+					</div>
+					<div>
+						<div class="cbo-listar">
+							<label>Área</label>
+							<select id="areaFilter">
+								<option value="">Todas las Áreas</option>
+								<option th:each="a : ${areaList}" th:value="${a.descripcion}"
+									th:text="${a.descripcion}"></option>
+							</select>
+						</div>
+
+						<div class="cbo-listar">
+							<label>Tipo de Solicitud</label>
+							<select id="tipoFilter">
+								<option value="">Todos los Tipos</option>
+								<option th:each="t : ${tipoSolicitudList}" th:value="${t.descripcion}"
+									th:text="${t.descripcion}"></option>
+							</select>
+						</div>
+
+						<div class="cbo-listar">
+							<label>Estado</label>
+							<select id="estadoFilter">
+								<option value="">Todos los Estados</option>
+								<option value="Pendiente">Pendiente</option>
+								<option value="Rechazado">Rechazado</option>
+								<option value="Aprobado">Aprobado</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section class="table_body">
+				<table>
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Tipo</th>
+							<th>Empleado</th>
+							<th>Área</th>
+							<th>Fecha</th>
+							<th>Estado</th>
+							<th>Acciones</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="solicitud : ${solicitudes}" th:attr="data-area=${solicitud.area.descripcion}, 
+									 data-tipo=${solicitud.tipoSolicitud.descripcion}, 
+									 data-estado=${solicitud.estadoSolicitud}">
+							<td class="centrado" th:text="${solicitud.id}"></td>
+							<td th:text="${solicitud.tipoSolicitud.descripcion}"></td>
+							<td th:text="${solicitud.empleado.nombres + ' ' + solicitud.empleado.apellidos}"></td>
+							<td th:text="${solicitud.area.descripcion}"></td>
+							<td class="centrado" th:text="${#dates.format(solicitud.fechaEmision, 'yyyy-MM-dd')}"></td>
+							<td class="centrado" th:text="${solicitud.estadoSolicitud}"></td>
+							<td style="width: 250px; padding-left: 30px;">
+								<a th:href="@{/solicitud/info/{id}(id=${solicitud.id})}"
+									class="btn btn-info">Detalle</a>
+								<a th:if="${solicitud.estadoSolicitud.name() == 'Pendiente'}"
+									th:href="@{/solicitud/edit/{id}(id=${solicitud.id})}"
+									class="btn btn-primary">Editar</a>
+
+								<a th:if="${solicitud.estadoSolicitud.name() == 'Rechazado'}"
+									th:href="@{/solicitud/{id}(id=${solicitud.id})}" class="btn btn-danger">Eliminar</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</section>
+		</div>
+	</main>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			const areaFilter = document.getElementById('areaFilter');
+			const tipoFilter = document.getElementById('tipoFilter');
+			const estadoFilter = document.getElementById('estadoFilter');
+			const filas = document.querySelectorAll('tbody tr');
+
+			function filtrarTabla() {
+				const area = areaFilter.value.toLowerCase();
+				const tipo = tipoFilter.value.toLowerCase();
+				const estado = estadoFilter.value.toLowerCase();
+
+				filas.forEach(fila => {
+					const a = fila.getAttribute('data-area')?.toLowerCase();
+					const t = fila.getAttribute('data-tipo')?.toLowerCase();
+					const e = fila.getAttribute('data-estado')?.toLowerCase();
+
+					const coincideArea = !area || a === area;
+					const coincideTipo = !tipo || t === tipo;
+					const coincideEstado = !estado || e === estado;
+
+					fila.style.display = (coincideArea && coincideTipo && coincideEstado) ? '' : 'none';
+				});
+			}
+
+			areaFilter.addEventListener('change', filtrarTabla);
+			tipoFilter.addEventListener('change', filtrarTabla);
+			estadoFilter.addEventListener('change', filtrarTabla);
+		});
+	</script>
+</body>
+
+</html>

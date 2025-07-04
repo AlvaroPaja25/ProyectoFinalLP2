@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="ISO-8859-1">
+	<title>Spring Boot</title>
+	<link rel="stylesheet" href="/estilos/navbar.css">
+	<link rel="stylesheet" href="/estilos/formulario.css">
+</head>
+
+<body>
+	<div th:replace="~{fragments/navbar :: navbar}"></div>
+	<main>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-6 offset-md-3">
+					<div class="card" style="width: 52vw;">
+						<div class="card-header">
+							<h2 class="text-center">Agregar Nuevo Empleado</h2>
+						</div>
+
+						<div th:if="${param.success}">
+							<div class="alert alert-info">
+								¡Empleado registrado con éxito!
+							</div>
+						</div>
+
+						<div class="card-body">
+							<form th:action="@{/empleado}" th:object="${empleado}" method="POST">
+
+								<!-- ID oculto -->
+								<div class="form-group" style="display: none">
+									<label>ID</label>
+									<input type="text" name="id" th:field="*{id}" class="form-control" disabled />
+								</div>
+
+								<!-- Nombres -->
+								<div class="form-group">
+									<label>Nombres</label>
+									<input type="text" th:field="*{nombres}" class="form-control"
+										placeholder="Ingresar nombres" />
+								</div>
+
+								<!-- Apellidos -->
+								<div class="form-group">
+									<label>Apellidos</label>
+									<input type="text" th:field="*{apellidos}" class="form-control"
+										placeholder="Ingresar apellidos" />
+								</div>
+
+								<!-- Área -->
+								<div class="form-group">
+									<label>Área</label>
+									<select th:field="*{area}" class="form-control">
+										<option th:each="area : ${areaList}" th:value="${area.id}"
+											th:text="${area.descripcion}" />
+									</select>
+								</div>
+
+								<!-- Cargo -->
+								<div class="form-group">
+									<label>Cargo</label>
+									<select th:field="*{cargo}" class="form-control">
+										<option th:each="cargo : ${cargoList}" th:value="${cargo.id}"
+											th:text="${cargo.descripcion}" />
+									</select>
+								</div>
+
+								<!-- Ciudad -->
+								<div class="form-group">
+									<label>Ciudad</label>
+									<input type="text" th:field="*{nombreCiudad}" class="form-control"
+										placeholder="Ingresar ciudad" />
+								</div>
+
+								<!-- Dirección -->
+								<div class="form-group">
+									<label>Dirección</label>
+									<input type="text" th:field="*{direccionEmpleado}" class="form-control"
+										placeholder="Ingresar dirección" />
+								</div>
+
+								<!-- Teléfono -->
+								<div class="form-group">
+									<label>Teléfono</label>
+									<input type="text" th:field="*{telefono}" class="form-control"
+										placeholder="Ingresar teléfono" />
+								</div>
+
+								<!-- Botones -->
+								<div class="box-footer">
+									<button type="submit" class="fbtn fbtn-primary">Agregar</button>
+									<a th:href="@{/empleado}" class="fbtn fbtn-cancelar">Cancelar</a>		
+								</div>
+
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+</body>
+
+</html>

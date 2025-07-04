@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="ISO-8859-1">
+	<title>Spring Boot</title>
+	<link rel="stylesheet" href="/estilos/navbar.css">
+	<link rel="stylesheet" href="/estilos/formulario.css">
+</head>
+
+<body>
+	<div th:replace="~{fragments/navbar :: navbar}"></div>
+	<main>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-6 offset-md-3">
+
+					<div class="card" style="width: 48vw;">
+						<div class="card-header">
+							<h2 class="text-center">Editar Producto</h2>
+						</div>
+						<div th:if="${param.success}">
+							<div class="alert alert-info">
+								¡Se han guardadadod con éxito los cambios!
+							</div>
+						</div>
+						<div class="card-body">
+							<form th:action="@{/producto/{id} (id=${producto.id})}" th:object="${producto}"
+								method="POST">
+								<div class="form-group">
+									<label>Id</label>
+									<input type="text" name="id" th:field="*{id}" class="form-control"
+										placeholder="Ingresar Id" disabled />
+								</div>
+								<div class="form-group">
+									<label>Nombre</label>
+									<input type="text" name="nombre" th:field="*{nombre}" class="form-control"
+										th:value="${producto.nombre}" />
+								</div>
+								<div class="form-group">
+									<label>Descripcion</label>
+									<input type="text" name="descripcion" th:field="*{descripcion}" class="form-control"
+										th:value="${producto.descripcion}" />
+								</div>
+								<div class="form-group">
+									<label>Categoria</label>
+									<select th:field="*{categoria}" name="categoriaList" class="form-control">
+										<option th:each="categoria :${categoriaList}" th:value="${categoria.id}"
+											th:text="${categoria.descripcion}" />
+									</select>
+								</div>
+
+								<div class="box-footer">
+									<button type="submit" class="btn btn-primary">Guardar</button>
+									<a th:href="@{/producto}" class="btn btn-cancelar">Cancelar</a>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+
+</body>
+
+</html>

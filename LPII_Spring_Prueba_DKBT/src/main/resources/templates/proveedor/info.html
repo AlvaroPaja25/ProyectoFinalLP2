@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="ISO-8859-1">
+	<title>Detalles de Relación</title>
+	<link rel="stylesheet" href="/estilos/navbar.css">
+	<link rel="stylesheet" href="/estilos/tables.css">
+	<script>
+		function toggleRelaciones() {
+			const activos = document.querySelectorAll(".rel-activo");
+			const inactivos = document.querySelectorAll(".rel-inactivo");
+			const toggleBtn = document.getElementById("toggleRelBtn");
+			const mostrar = toggleBtn.dataset.estado === "activo";
+
+			activos.forEach(row => row.style.display = mostrar ? "none" : "");
+			inactivos.forEach(row => row.style.display = mostrar ? "" : "none");
+
+			toggleBtn.innerText = mostrar ? "Mostrar Activos" : "Mostrar Inactivos";
+			toggleBtn.dataset.estado = mostrar ? "inactivo" : "activo";
+		}
+		
+		document.addEventListener("DOMContentLoaded", function () {
+				const btn = document.getElementById("agregarProductoBtn");
+				const hiddenInput = document.getElementById("proveedorIdHidden");
+
+				if (btn && hiddenInput) {
+					const idProveedor = hiddenInput.value;
+					btn.href = `/proveedor/newProducto?idProveedor=${idProveedor}`;
+				} else {
+					btn.style.display = 'none'; // Oculta el botón si no hay proveedor
+				}
+			});
+	</script>
+</head>
+
+<body>
+	<div th:replace="~{fragments/navbar :: navbar}"></div>
+	<main>
+		<div class="cont_tabla">
+			<section class="table_header">
+				<div class="row">
+					<h1>Relaciones de Proveedor con Productos</h1>
+				</div>
+				<div class="row">
+					<div>
+						<div class="boton">
+							<a href="#" id="agregarProductoBtn">Agregar Producto</a>
+						</div>
+						<div class="boton">
+							<a th:href="@{/proveedor}">Regresar</a>
+						</div>
+					</div>
+					<div class="boton">
+						<button type="button" onclick="toggleRelaciones()" id="toggleRelBtn"
+							data-estado="activo">Mostrar Inactivos</button>
+					</div>
+				</div>
+			</section>
+			<input type="hidden" th:value="${idProveedor}" id="proveedorIdHidden" />
+			<section class="table_body">
+				<table>
+					<thead>
+						<tr>
+							<th>Proveedor</th>
+							<th>ID Producto</th>
+							<th>Producto</th>
+							<th>Descripción</th>
+							<th>Precio</th>
+							<th>Acciones</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="item : ${productoProveedor}"
+							th:classappend="${item.estado.name() == 'Deshabilitado'} ? 'rel-inactivo' : 'rel-activo'"
+							th:style="${item.estado.name() == 'Deshabilitado'} ? 'display:none' : ''">
+							<td class="centrado" th:text="${item.id.proveedor.nombre}"></td>
+							<td class="centrado" th:text="${item.id.producto.id}"></td>
+							<td th:text="${item.id.producto.nombre}"></td>
+							<td th:text="${item.id.producto.descripcion}"></td>
+							<td class="centrado" th:text="${item.precio}"></td>
+							<td class="centrado">
+								<a th:if="${item.estado.name() == 'Habilitado'}"
+									th:href="@{/proveedor/producto/edit(idProducto=${item.id.producto.id}, idProveedor=${item.id.proveedor.id})}"
+									class="btn btn-primary">Editar</a>
+								<a th:if="${item.estado.name() == 'Habilitado'}"
+									th:href="@{/proveedor/producto(idProducto=${item.id.producto.id}, idProveedor=${item.id.proveedor.id})}"
+									class="btn btn-danger">Eliminar</a>
+								<a th:if="${item.estado.name() == 'Deshabilitado'}"
+									th:href="@{/proveedor/producto/reactivar(idProducto=${item.id.producto.id}, idProveedor=${item.id.proveedor.id})}"
+									class="btn btn-primary">Reactivar</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</section>
+		</div>
+	</main>
+</body>
+
+</html>
