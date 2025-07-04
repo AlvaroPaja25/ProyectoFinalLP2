@@ -78,5 +78,6 @@ public class EmpleadoController {
 	    empleadoService.actualizarEmpleado(existenteEmpleado);
 	    return "redirect:/empleado";
 	}
+	
 }
 

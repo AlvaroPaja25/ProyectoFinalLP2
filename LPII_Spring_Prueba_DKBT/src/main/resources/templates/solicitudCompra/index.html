@@ -55,7 +55,7 @@
 
 							<!-- Botones de Acción -->
 							<td style="width: 250px; padding-left: 30px;">
-								<a th:href="@{/solicitud_compra/detalle/{id}(id=${sc.id})}" class="btn btn-info">PDF</a>
+								<a th:href="@{/solicitud_compra/detalles/{id}(id=${sc.id})}" class="btn btn-info">PDF</a>
 								<a th:if="${sc.estadoOrden.name() != 'Aprobado'}"
 								   th:href="@{/solicitud_compra/edit/{id}(id=${sc.id})}" class="btn btn-primary">Editar</a>
 							</td>
