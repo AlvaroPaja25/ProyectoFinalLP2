@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="ISO-8859-1">
+	<title>Proveedores</title>
+	<link rel="stylesheet" href="/estilos/navbar.css">
+	<link rel="stylesheet" href="/estilos/tables.css">
+	<script>
+		function toggleProveedores() {
+			const activos = document.querySelectorAll(".fila-activo");
+			const inactivos = document.querySelectorAll(".fila-inactivo");
+			const mostrarBtn = document.getElementById("toggleBtn");
+			const esActivo = mostrarBtn.dataset.estado === "activo";
+
+			activos.forEach(row => row.style.display = esActivo ? "none" : "");
+			inactivos.forEach(row => row.style.display = esActivo ? "" : "none");
+
+			mostrarBtn.innerText = esActivo ? "Mostrar Activos" : "Mostrar Inactivos";
+			mostrarBtn.dataset.estado = esActivo ? "inactivo" : "activo";
+		}
+	</script>
+</head>
+
+<body>
+	<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+	<main>
+		<div class="cont_tabla">
+			<section class="table_header">
+				<div class="row">
+					<h1>Lista de Proveedores</h1>
+				</div>
+				<div class="row">
+					<div>
+						<div class="boton">
+							<a th:href="@{/proveedor/new}">Agregar Proveedor</a>
+						</div>
+					</div>
+					<div class="boton">
+						<button type="button" onclick="toggleProveedores()" id="toggleBtn" data-estado="activo">Mostrar
+							Inactivos</button>
+					</div>
+				</div>
+			</section>
+
+			<section class="table_body">
+				<table>
+					<thead>
+						<tr>
+							<th>Id</th>
+							<th>Nombres</th>
+							<th>Ruc</th>
+							<th>Dirección</th>
+							<th>Teléfono</th>
+							<th>Acciones</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="item : ${proveedores}"
+							th:classappend="${item.estado.name() == 'Inactivo'} ? 'fila-inactivo' : 'fila-activo'"
+							th:style="${item.estado.name() == 'Inactivo'} ? 'display:none' : ''">
+							<td class="centrado" th:text="${item.id}"></td>
+							<td th:text="${item.nombre}"></td>
+							<td th:text="${item.ruc}"></td>
+							<td th:text="${item.direccion}"></td>
+							<td class="centrado" th:text="${item.telefono}"></td>
+							<td class="centrado">
+								<a th:if="${item.estado.name() == 'Activo'}"
+									th:href="@{/proveedor/edit/{id}(id=${item.id})}" class="btn btn-primary">Editar</a>
+								<a th:if="${item.estado.name() == 'Activo'}"
+									th:href="@{/proveedor/info/{id}(id=${item.id})}" class="btn btn-info">Detalle</a>
+								<a th:if="${item.estado.name() == 'Activo'}" th:href="@{/proveedor/{id}(id=${item.id})}"
+									class="btn btn-danger">Eliminar</a>
+								<a th:if="${item.estado.name() == 'Inactivo'}"
+									th:href="@{/proveedor/reactivar/{id}(id=${item.id})}"
+									class="btn btn-primary">Reactivar</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</section>
+		</div>
+	</main>
+</body>
+
+</html>

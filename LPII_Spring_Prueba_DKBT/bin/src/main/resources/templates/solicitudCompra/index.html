@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="ISO-8859-1">
+	<title>Lista de Solicitudes de Compra</title>
+	<link rel="stylesheet" href="/estilos/tables.css">
+	<link rel="stylesheet" href="/estilos/navbar.css">
+</head>
+
+<body>
+	<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+	<main>
+		<div class="cont_tabla">
+			<section class="table_header">
+				<div class="row">
+					<h1>Lista Solicitudes de Compra</h1>
+				</div>
+				<div class="row">
+					<div class="boton">
+						<a th:href="@{/solicitudCompra/new}">
+						    Generar Solicitud de Compra
+						</a>
+
+					</div>
+				</div>
+			</section>
+
+			<section class="table_body">
+				<table>
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Empleado</th>
+							<th>Cargo</th>
+							<th>Fecha</th>
+							<th>Total Gasto</th>	
+							<th>Estado</th>
+							<th>Orden de Compra</th>
+							<th>Acciones</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="sc : ${listaSolicitudesCompra}">
+							<td class="centrado" th:text="${sc.id}"></td>
+							<td th:text="${sc.empleado.nombres + ' ' + sc.empleado.apellidos}"></td>
+							<td th:text="${sc.empleado.cargo.descripcion}"></td>
+							<td class="centrado" th:text="${#dates.format(sc.fechaEmision, 'yyyy-MM-dd')}"></td>
+							<td class="centrado" th:text="${sc.totalGasto}"></td>
+							<td class="centrado" th:text="${sc.estadoOrden}"></td>
+
+							<!-- Columna Orden de Compra -->
+							<td class="centrado" th:text="${sc.estadoOrden.name() == 'Aprobado' ? 'Generado' : 'Pendiente'}"></td>
+
+							<!-- Botones de Acción -->
+							<td style="width: 250px; padding-left: 30px;">
+								<a th:href="@{/solicitud_compra/detalle/{id}(id=${sc.id})}" class="btn btn-info">PDF</a>
+								<a th:if="${sc.estadoOrden.name() != 'Aprobado'}"
+								   th:href="@{/solicitud_compra/edit/{id}(id=${sc.id})}" class="btn btn-primary">Editar</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</section>
+		</div>
+	</main>
+</body>
+</html>

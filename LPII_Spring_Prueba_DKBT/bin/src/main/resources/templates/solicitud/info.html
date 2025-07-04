@@ -31,6 +31,7 @@
 							<th>ID</th>
 							<th>Solicitud N°</th>
 							<th>Producto</th>
+							<th>descripción</th>
 							<th>Justificación</th>
 							<th>Cantidad</th>
 						</tr>
@@ -39,8 +40,8 @@
 						<tr th:each="item : ${detalleSolicitud}">
 							<td class="centrado" th:text="${item.id}"></td>
 							<td class="centrado" th:text="${item.solicitud.id}"></td>
-
-							<td th:text="${item.producto.nombre}"></td>
+							<td th:text="${item.producto != null ? item.producto.nombre : 'N/A'}"></td>
+							<td th:text="${item.producto != null ? item.producto.descripcion : 'N/A'}"></td>
 							<td th:text="${item.justificacion}"></td>
 							<td class="centrado" th:text="${item.cantidad}"></td>
 						</tr>

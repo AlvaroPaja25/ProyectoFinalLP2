@@ -15,7 +15,7 @@
 		<div class="cont_tabla">
 			<section class="table_header">
 				<div class="row">
-					<h1>Lista Solicitudes</h1>
+					<h1>Solicitudes de Abastecimiento </h1>
 				</div>
 				<div class="row">
 					<div>
@@ -49,6 +49,7 @@
 								<option value="Pendiente">Pendiente</option>
 								<option value="Rechazado">Rechazado</option>
 								<option value="Aprobado">Aprobado</option>
+								<option value="Recibida">Recibida</option>
 							</select>
 						</div>
 					</div>
@@ -79,9 +80,10 @@
 							<td class="centrado" th:text="${#dates.format(solicitud.fechaEmision, 'yyyy-MM-dd')}"></td>
 							<td class="centrado" th:text="${solicitud.estadoSolicitud}"></td>
 							<td style="width: 250px; padding-left: 30px;">
-								<a th:href="@{/solicitud/info/{id}(id=${solicitud.id})}"
+							<a th:if="${solicitud.estadoSolicitud.name() != 'Rechazado'}"
+									th:href="@{/solicitud/info/{id}(id=${solicitud.id})}"
 									class="btn btn-info">Detalle</a>
-								<a th:if="${solicitud.estadoSolicitud.name() == 'Pendiente'}"
+								<a th:if="${solicitud.estadoSolicitud.name() == 'Pendiente' or solicitud.estadoSolicitud.name() == 'Rechazado'}"
 									th:href="@{/solicitud/edit/{id}(id=${solicitud.id})}"
 									class="btn btn-primary">Editar</a>
 

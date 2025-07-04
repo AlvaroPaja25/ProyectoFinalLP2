@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="ISO-8859-1">
+	<title>Generar Solicitudes de Compra</title>
+	<link rel="stylesheet" href="/estilos/tables.css">
+	<link rel="stylesheet" href="/estilos/navbar.css">
+	<link rel="stylesheet" href="/estilos/formulario.css">
+</head>
+
+<body>
+	<div th:replace="~{fragments/navbar :: navbar}"></div>
+	<main style="align-items: center;">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-8 offset-md-2">
+					<div class="card" style="width: 55vw;">
+						<div class="card-header">
+							<h2 class="text-center">Generar Solicitud de Compra</h2>
+						</div>
+
+						<div class="card-body">
+							<form th:action="@{/solicitudCompra/save}" th:object="${solicitudCompra}" method="POST">
+								
+								<th:block th:if="${id != null}">
+								    <input type="hidden" name="idSolicitudesOriginales" th:value="${id}" />
+								</th:block>
+
+								<div class="form-group">
+								    <label>Empleado</label>
+								    <input type="text" id="empleado_autocomplete" class="form-control" placeholder="Buscar empleado..." autocomplete="off" />
+									<input type="hidden" th:field="*{empleadoId}" id="empleado_id" />
+								</div>
+
+
+								<!-- Observaciones -->
+								<div class="form-group">
+								    <label>Observaciones</label>
+								    <input type="text" class="form-control"
+								           th:field="*{observaciones}"
+								           placeholder="Opcional" />
+								</div>
+
+								<div class="cont_tabla" style="width: 100%;">
+									<section class="table_header">
+										<div class="row"></div>
+									</section>
+									<section class="table_body" style="height: 30vh;">
+										<table>
+											<thead>
+												<tr>
+													<th>ID</th>
+													<th>Producto</th>
+													<th>Cantidad</th>
+													<th>Proveedores Disponibles</th>
+													<th>Precio Unitario</th>
+													<th>Subtotal</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr th:each="prod, iterStat : ${productos}">
+												    <td>
+												        <span th:text="${prod.idProducto}"></span>
+												        <input type="hidden" 
+												               th:name="'detallesOrdenCompra[' + ${iterStat.index} + '].idProducto'" 
+												               th:value="${prod.idProducto}" />
+												    </td>
+												    <td th:text="${prod.nombre}"></td>
+												    <td>
+												        <span th:id="'cantidad_' + ${prod.idProducto}" th:text="${prod.totalCantidad}"></span>
+												        <input type="hidden" th:name="'detallesOrdenCompra[' + ${iterStat.index} + '].cantidad'" th:value="${prod.totalCantidad}" />
+												    </td>
+												    <td>
+												        <select th:name="'detallesOrdenCompra[' + ${iterStat.index} + '].idProveedor'"
+												                th:attr="data-producto-id=${prod.idProducto}"
+												                class="form-control">
+												            <option value="">-- Seleccione --</option>
+												            <option th:each="prov, iter : ${prod.proveedores}"
+												                    th:value="${prov.idProveedor}"
+												                    th:data-precio="${prov.precio}"
+												                    th:text="${prov.nombreProveedor + ' - S/ ' + prov.precio}"
+												                    th:selected="${iter.index == 0}">
+												            </option>
+												        </select>
+												    </td>
+												    <td>
+												        <span th:id="'precio_' + ${prod.idProducto}"></span>
+												        <input type="hidden" th:name="'detallesOrdenCompra[' + ${iterStat.index} + '].precioUnitario'"
+												               th:id="'precio_input_' + ${prod.idProducto}" value="" />
+												    </td>
+												    <td>
+												        <span th:id="'subtotal_' + ${prod.idProducto}">-</span>
+												        <input type="hidden" th:name="'detallesOrdenCompra[' + ${iterStat.index} + '].subtotal'"
+												               th:id="'subtotal_input_' + ${prod.idProducto}" value="" />
+												    </td>
+												</tr>
+
+
+
+											</tbody>
+
+
+										</table>
+									</section>
+								</div>
+
+								<div class="form-group"></div>
+
+								<!-- Total gasto -->
+								<div class="form-group">
+								    <label>Total Gastos</label>
+								    <input type="text" class="form-control"
+								           id="total_gasto"
+								           th:field="*{totalGasto}"
+								           readonly
+								           placeholder="Se calcula automáticamente" />
+								</div>
+
+								<div class="box-footer text-center mt-4" style="display: flex; justify-content: space-around;">
+									<button type="submit" class="fbtn fbtn-primary">Efectuar</button>
+									<a th:href="@{/solicitudCompra}" class="fbtn fbtn-cancelar">Cancelar</a>
+								</div>
+
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+</body>
+<script>
+	document.addEventListener("DOMContentLoaded", function() {
+	    document.querySelectorAll("select[data-producto-id]").forEach(function(select) {
+	        select.addEventListener("change", function() {
+	            var selectedOption = this.options[this.selectedIndex];
+	            var precio = parseFloat(selectedOption.getAttribute("data-precio")) || 0;
+	            var productoId = this.getAttribute("data-producto-id");
+
+	            var precioSpan = document.getElementById("precio_" + productoId);
+	            precioSpan.textContent = precio > 0 ? precio.toFixed(2) : "-";
+
+	            var cantidadElem = document.getElementById("cantidad_" + productoId);
+	            var cantidad = parseInt(cantidadElem.textContent) || 0;
+
+	            var subtotal = precio * cantidad;
+	            var subtotalSpan = document.getElementById("subtotal_" + productoId);
+	            subtotalSpan.textContent = subtotal > 0 ? subtotal.toFixed(2) : "-";
+
+	            // Guardar en inputs ocultos
+	            var precioInput = document.getElementById("precio_input_" + productoId);
+	            var subtotalInput = document.getElementById("subtotal_input_" + productoId);
+
+	            if (precioInput) precioInput.value = precio.toFixed(2);
+	            if (subtotalInput) subtotalInput.value = subtotal.toFixed(2);
+
+	            recalcularTotal();
+	        });
+
+	        select.dispatchEvent(new Event("change"));
+	    });
+
+	    function recalcularTotal() {
+	        var total = 0;
+	        document.querySelectorAll("span[id^='subtotal_']").forEach(function(subtotalSpan) {
+	            var valor = parseFloat(subtotalSpan.textContent);
+	            if (!isNaN(valor)) {
+	                total += valor;
+	            }
+	        });
+
+	        var totalElem = document.getElementById("total_gasto");
+	        totalElem.value = total > 0 ? total.toFixed(2) : "-";
+	    }
+	});
+
+</script>
+
+<!-- jQuery UI (si lo usas) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+
+<script>
+$(function() {
+    $("#empleado_autocomplete").autocomplete({
+        source: function(request, response) {
+            $.getJSON("/empleados/buscar", { term: request.term }, function(data) {
+                response(data.map(emp => ({
+                    label: emp.nombres + " " + emp.apellidos,
+                    value: emp.nombres + " " + emp.apellidos,
+                    id: emp.id
+                })));
+            });
+        },
+        select: function(event, ui) {
+            $("#empleado_id").val(ui.item.id);
+        },
+        minLength: 2
+    });
+});
+</script>
+
+
+
+
+
+</html>

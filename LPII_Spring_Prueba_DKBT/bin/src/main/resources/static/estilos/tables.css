@@ -103,7 +103,7 @@ table, th, td {
     background-color: #0011a8;
 }
 
-.boton>a {
+.boton>a  {
     font-size: 1.1rem;
     display: block;
     padding: 0.6rem 2rem 0.6rem 1rem;
@@ -112,6 +112,20 @@ table, th, td {
     color: white;
     z-index: 1;
 }
+
+.boton > button {
+    font-size: 1.1rem;
+    display: block;
+    padding: 0.6rem 2rem 0.6rem 1rem;
+    cursor: pointer;
+    white-space: nowrap;   /* Usa white-space en lugar de text-wrap */
+    color: white;
+    z-index: 1;
+    background: none;      /* Opcional: para quitar el fondo por defecto del botón */
+    border: none;          /* Opcional: para quitar el borde por defecto del botón */
+    text-decoration: none; /* Opcional: para quitar subrayado en <a> */
+}
+
 
 
 .boton::after {
